@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AACE,YAAM;EACJ,YAAY,EAAE,IAAI",
+"sources": ["auth.module.scss"],
+"names": [],
+"file": "auth.module.css"
+}

@@ -1,0 +1,24 @@
+.task h2 {
+  font-size: 28px;
+  margin: 20px 0; }
+.task h3 {
+  font-size: 22px;
+  margin: 12px 0; }
+  .task h3 span {
+    font-size: 18px;
+    color: #4c4aa8;
+    font-weight: 600; }
+.task .task1 {
+  background-color: #baffe3;
+  padding: 10px;
+  border-bottom: 1px solid #1900ff; }
+.task .task2 {
+  background-color: #8bebff;
+  padding: 10px;
+  border-bottom: 1px solid #1900ff; }
+.task .task3 {
+  background-color: #399dff;
+  padding: 10px;
+  border-bottom: 5px solid #1900ff; }
+
+/*# sourceMappingURL=task.module.css.map */
