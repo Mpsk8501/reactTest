@@ -47,6 +47,13 @@ export default class {
         data.value = value;
         data.valid = data.validator(data.value);
     }
+    @action reset() {
+        for(let i in this.formData){
+            this.formData[i].value ='';
+        }
+    }
+
+
 }
 
 

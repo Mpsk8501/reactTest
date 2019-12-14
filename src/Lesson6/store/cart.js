@@ -8,15 +8,17 @@ export default class {
         this.token = this.storage.getItem('cartToken');
     }
 
+    lastOrderCash = {};
+
+    @observable isBlocked = false;
+
     @observable products = [];
 
     @action load(){
         this.api.getCart(this.token).then((data)=>{
             this.products = data.cart;
-            console.log(data);
             if(data.needUpdate){
                 this.storage.setItem('cartToken',data['token']);
-                console.log(data)
             }
         })
     }
@@ -39,25 +41,40 @@ export default class {
     }
 
     @action change(id, cnt) {
+        this.isBlocked = true;
         let index = this.products.findIndex((pr) => pr.id === id);
         if (index !== -1) {
-            this.products[index].current = cnt;
-            console.log(this.products)
+            this.api.updateCart(this.token,id,cnt).then(()=> {
+                this.products[index].current = cnt;
+                this.isBlocked = false;
+            })
         }
     }
 
 
     @action add(id) {
-        this.products.push({id, current: 1});
-        this.api.addToCart(this.token,id)
+        this.api.addToCart(this.token,id).then(()=>{
+            this.products.push({id, current: 1});
+        })
     }
 
     @action remove(id) {
         let index = this.products.findIndex((pr) => pr.id === id);
         if (index !== -1) {
-            this.products.splice(index, 1);
-            this.api.removeInCart(this.token,id)
+            this.api.removeInCart(this.token,id).then(()=>{
+                this.products.splice(index, 1);
+            })
         }
+    }
+    @action reset() {
+        this.lastOrderCash = [];
+        this.lastOrderCash.goods = this.products;
+        this.lastOrderCash.total = this.total;
+        this.lastOrderCash.form = this.rootStore.order.formData;
+        this.api.removeCart(this.token).then(()=>{
+            this.rootStore.order.reset();
+            this.products=[]
+        })
     }
 }
 

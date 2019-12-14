@@ -16,7 +16,9 @@ class Cart extends React.Component {
                         <td>{product.title}</td>
                         <td>{product.price}</td>
                         <td>
-                            <AppMinMax min={1}
+                            <AppMinMax
+                                       disabled={cart.isBlocked}
+                                       min={1}
                                        max={product.rest}
                                        cnt={product.current}
                                        onChange={(current) => cart.change(product.id, current)}

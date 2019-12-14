@@ -6,6 +6,7 @@ import {Link} from "react-router-dom"
 import {routesMap} from "../../routs";
 import withStore from "../../hocs/withStore";
 
+
 class Order extends React.Component {
     state = {
         showModal: false
@@ -21,6 +22,7 @@ class Order extends React.Component {
 
     confirm = () =>{
         this.hide();
+        this.props.stores.cart.reset();
         this.props.history.push(routesMap.Result)
     };
 

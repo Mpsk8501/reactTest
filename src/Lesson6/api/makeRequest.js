@@ -27,8 +27,19 @@ async function addToCart(cartToken,id) {
         },
         body: JSON.stringify({'token': cartToken, id: id})
     })
+}
+async function updateCart(cartToken,id,cnt) {
+    return makeRequest(`/serv/updateCart`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({'token': cartToken, id: id,current:cnt})
+    })
 
 }
+
+
 async function removeInCart(cartToken,id) {
     return  makeRequest(`/serv/removeGood`,{
         method: 'POST',
@@ -40,6 +51,17 @@ async function removeInCart(cartToken,id) {
 
 
 }
+
+async function removeCart(cartToken) {
+    return  makeRequest(`/serv/removeCart`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({'token':cartToken})
+    });
+}
+
 
 
 
@@ -61,7 +83,7 @@ function makeRequest(url, options = {}) {
 
 }
 
-export {all, getAuth,getCart,addToCart,removeInCart};
+export {all, getAuth,getCart,addToCart,removeInCart,updateCart,removeCart};
 
 // async function add(text,id=''){
 //     let data = await makeRequest(`serv/add`,{

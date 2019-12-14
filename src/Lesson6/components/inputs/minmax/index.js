@@ -42,17 +42,17 @@ export default class extends React.PureComponent{
     };
 
     render(){
-        console.log('render minMax')
         return (
             <div>
-                <Button onClick={this.decrease}>-</Button>
+                <Button disabled={this.props.disabled} onClick={this.decrease}>-</Button>
                 <AppLazyInput
                     nativeProps={{type: 'text', className: styles.input}}
                     value={this.props.cnt}
                     onChange={this.onChange}
                     ref={this.lazyInput}
+                    disabled={this.props.disabled}
                 />
-                <Button onClick={this.increase}>+</Button>
+                <Button disabled={this.props.disabled}  onClick={this.increase}>+</Button>
             </div>
         );
     }

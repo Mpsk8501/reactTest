@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from "react-bootstrap/Button";
 
 export default class extends React.Component{
     static defaultProps = {
@@ -44,6 +45,7 @@ export default class extends React.Component{
     render(){
         return (
             <input {...this.props.nativeProps}
+                   disabled={this.props.disabled}
                    defaultValue={this.props.value} 
                    onBlur={this.checkChange}
                    onKeyUp={this.checkEnterKey}

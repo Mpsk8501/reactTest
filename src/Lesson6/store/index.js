@@ -6,8 +6,7 @@ import * as api from '../api/makeRequest';
 class RootStore {
     constructor(){
         this.api= api;
-        this.storage = localStorage
-
+        this.storage = localStorage;
         this.cart = new CartStore(this);
         this.product = new ProductStore(this);
         this.order = new OrderStore(this);
