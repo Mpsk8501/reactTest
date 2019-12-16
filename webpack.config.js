@@ -8,7 +8,7 @@ let conf = {
         ["@babel/polyfill",`./index.js`],
     output: {
         path: path.resolve(__dirname, './dist/'),
-        filename: 'main.js',
+        filename: '[name].js',
         publicPath: 'dist/'
     },
     devServer: {
@@ -24,9 +24,28 @@ let conf = {
             }
         }
     },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendors: {
+                    name: `chunk-vendors`,
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                    chunks: 'initial'
+                },
+                common: {
+                    name: `chunk-common`,
+                    minChunks: 2,
+                    priority: -20,
+                    chunks: 'initial',
+                    reuseExistingChunk: true
+                }
+            }
+        }
+    },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'style.css'
+            filename: '[name].css'
         }),
     ],
     module: {

@@ -21,9 +21,12 @@ class Order extends React.Component {
     };
 
     confirm = () =>{
-        this.hide();
-        this.props.stores.cart.reset();
-        this.props.history.push(routesMap.Result)
+        this.props.stores.cart.reset().then(()=>{
+            this.hide();
+            this.props.history.push(routesMap.Result)
+        }).catch((e)=>{
+            console.log(e)
+        });
     };
 
 

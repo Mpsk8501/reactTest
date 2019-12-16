@@ -2,6 +2,9 @@ import CartStore from './cart';
 import OrderStore from './form';
 import ProductStore from './products';
 import * as api from '../api/makeRequest';
+import {configure} from "mobx";
+
+configure({enforceActions:"observed"})
 
 class RootStore {
     constructor(){

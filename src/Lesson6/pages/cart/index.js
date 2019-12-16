@@ -17,7 +17,7 @@ class Cart extends React.Component {
                         <td>{product.price}</td>
                         <td>
                             <AppMinMax
-                                       disabled={cart.isBlocked}
+                                       disabled={cart.processId[product.id]}
                                        min={1}
                                        max={product.rest}
                                        cnt={product.current}
@@ -26,7 +26,10 @@ class Cart extends React.Component {
                         </td>
                         <td>{product.price * product.current}</td>
                         <td>
-                            <Button onClick={() => cart.remove(product.id)}>
+                            <Button
+                                disabled={cart.processId[product.id]}
+                                onClick={() => cart.remove(product.id)}
+                            >
                                 X
                             </Button>
                         </td>

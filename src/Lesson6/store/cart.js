@@ -1,4 +1,4 @@
-import {observable, computed, action} from 'mobx';
+import {observable, computed, action,runInAction} from 'mobx';
 
 export default class {
     constructor(rootStore) {
@@ -10,18 +10,23 @@ export default class {
 
     lastOrderCash = {};
 
-    @observable isBlocked = false;
+    @observable processId = {};
+
 
     @observable products = [];
 
     @action load(){
         this.api.getCart(this.token).then((data)=>{
-            this.products = data.cart;
-            if(data.needUpdate){
-                this.storage.setItem('cartToken',data['token']);
-            }
+            runInAction(()=>{
+                this.products = data.cart;
+                if(data.needUpdate){
+                    this.storage.setItem('cartToken',data['token']);
+                }
+            })
+
         })
     }
+
 
     @computed get productsDetailed() {
         return this.products.map((pr) => {
@@ -41,39 +46,71 @@ export default class {
     }
 
     @action change(id, cnt) {
-        this.isBlocked = true;
-        let index = this.products.findIndex((pr) => pr.id === id);
-        if (index !== -1) {
-            this.api.updateCart(this.token,id,cnt).then(()=> {
-                this.products[index].current = cnt;
-                this.isBlocked = false;
-            })
+        if(!(id in this.processId)){
+            this.processId[id]=true;
+            let index = this.products.findIndex((pr) => pr.id === id);
+            if (index !== -1) {
+                this.api.updateCart(this.token,id,cnt).then(()=> {
+                    runInAction(()=>{
+                        this.products[index].current = cnt;
+                        delete this.processId[id]
+                    })
+                })
+            }
         }
+
     }
 
 
     @action add(id) {
-        this.api.addToCart(this.token,id).then(()=>{
-            this.products.push({id, current: 1});
-        })
+        if(!this.inCart(id)&&!(id in this.processId)){
+            this.processId[id]=true;
+            this.api.addToCart(this.token,id).then((res)=>{
+                if(res){
+                    runInAction(()=>{
+                        this.products.push({id, current: 1});
+                        delete this.processId[id]
+                    })
+
+                }
+            })
+        }
+
+
     }
 
     @action remove(id) {
-        let index = this.products.findIndex((pr) => pr.id === id);
-        if (index !== -1) {
-            this.api.removeInCart(this.token,id).then(()=>{
-                this.products.splice(index, 1);
-            })
+        if(this.inCart(id)&&!(id in this.processId)){
+            let index = this.products.findIndex((pr) => pr.id === id);
+            if (index !== -1) {
+                this.processId[id]=true;
+                this.api.removeInCart(this.token,id).then(()=>{
+                    runInAction(()=>{
+                        this.products.splice(index, 1);
+                        delete this.processId[id]
+                    })
+                })
+            }
         }
+
     }
     @action reset() {
         this.lastOrderCash = [];
         this.lastOrderCash.goods = this.products;
         this.lastOrderCash.total = this.total;
         this.lastOrderCash.form = this.rootStore.order.formData;
-        this.api.removeCart(this.token).then(()=>{
-            this.rootStore.order.reset();
-            this.products=[]
+        return this.api.removeCart(this.token).then((res)=>{
+            return new Promise((resolve, reject)=>{
+                runInAction(()=>{
+                    if(res){
+                        this.rootStore.order.reset();
+                        this.products=[];
+                        resolve()
+                    }
+                    else reject();
+                })
+
+            })
         })
     }
 }

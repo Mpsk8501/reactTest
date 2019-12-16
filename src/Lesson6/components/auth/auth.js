@@ -52,7 +52,6 @@ export default class extends React.Component {
             }else {
                 return <>
                         <TextField
-                            id="outlined-basic"
                             className={style.input}
                             label="Login"
                             margin="normal"
@@ -63,7 +62,6 @@ export default class extends React.Component {
                             }}
                         />
                         <TextField
-                            id="outlined-basic"
                             className={style.input}
                             label="Password"
                             margin="normal"

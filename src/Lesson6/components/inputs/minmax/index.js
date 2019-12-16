@@ -44,7 +44,10 @@ export default class extends React.PureComponent{
     render(){
         return (
             <div>
-                <Button disabled={this.props.disabled} onClick={this.decrease}>-</Button>
+                <Button disabled={this.props.disabled||
+                        this.props.cnt<=this.props.min}
+                        onClick={this.decrease}
+                >-</Button>
                 <AppLazyInput
                     nativeProps={{type: 'text', className: styles.input}}
                     value={this.props.cnt}
@@ -52,7 +55,11 @@ export default class extends React.PureComponent{
                     ref={this.lazyInput}
                     disabled={this.props.disabled}
                 />
-                <Button disabled={this.props.disabled}  onClick={this.increase}>+</Button>
+                <Button disabled={this.props.disabled||
+                this.props.cnt>=this.props.max
+
+                }
+                        onClick={this.increase}>+</Button>
             </div>
         );
     }
