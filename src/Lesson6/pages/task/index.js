@@ -89,7 +89,7 @@ class extends React.Component{
                 <div className={style.task2}>
                     <h2>Task#2</h2>
                     <TextField
-                        id="outlined-basic"
+                        id="outlined-basic2"
                         label="Input for reverse"
                         variant="outlined"
                         value={this.state.inp2}
@@ -100,7 +100,7 @@ class extends React.Component{
                 <div className={style.task3}>
                     <h2>Task#3</h2>
                     <TextField
-                        id="outlined-basic"
+                        id="outlined-basic3"
                         label="Input num"
                         variant="outlined"
                         value={this.state.inp3}

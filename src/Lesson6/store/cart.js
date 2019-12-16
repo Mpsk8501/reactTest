@@ -12,7 +12,6 @@ export default class {
 
     @observable processId = {};
 
-
     @observable products = [];
 
     @action load(){
@@ -23,6 +22,8 @@ export default class {
                     this.storage.setItem('cartToken',data['token']);
                 }
             })
+
+        }).catch(()=>{
 
         })
     }
@@ -66,17 +67,21 @@ export default class {
         if(!this.inCart(id)&&!(id in this.processId)){
             this.processId[id]=true;
             this.api.addToCart(this.token,id).then((res)=>{
-                if(res){
-                    runInAction(()=>{
+                runInAction(()=> {
+                    if (res) {
                         this.products.push({id, current: 1});
-                        delete this.processId[id]
-                    })
-
-                }
+                    }
+                })
+            }).catch(()=>{
+                runInAction(()=> {
+                    this.rootStore.notifications.add("Can't add item to cart! Try again!")
+                })
+            }).finally(()=>{
+                runInAction(()=> {
+                    delete this.processId[id]
+                })
             })
         }
-
-
     }
 
     @action remove(id) {

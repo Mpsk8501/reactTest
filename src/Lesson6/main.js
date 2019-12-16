@@ -9,6 +9,9 @@ Store.product.load().then(()=>{
     ReactDom.render(<Provider stores={Store}>
         <App name={'Word'}/>
     </Provider> , document.querySelector('#app'));
+    Store.notifications.add('some test 1');
+    Store.notifications.add('some test 5');
+    Store.notifications.add('some test 9');
 });
 
 
